@@ -45,7 +45,7 @@ const LoginForm = ({ onSuccess }) => {
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <img
           className="mx-auto h-12 w-auto"
-          src="/api/placeholder/48/48"
+          src='https://static.vecteezy.com/system/resources/previews/015/806/664/original/play-button-for-media-app-logo-design-streaming-service-app-logotype-multimedia-player-icon-design-element-for-music-and-movie-start-sign-audio-and-video-editor-logo-vector.jpg'
           alt="Logo"
         />
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
@@ -131,7 +131,7 @@ const LoginForm = ({ onSuccess }) => {
 
               <div className="text-sm">
                 <a 
-                  href="#" 
+                  href="/forgot-password" 
                   className="font-medium text-indigo-600 hover:text-indigo-500"
                 >
                   Forgot your password?

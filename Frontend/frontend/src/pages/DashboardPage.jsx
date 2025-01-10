@@ -1,27 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Header from '../components/dashboard/Header';
-import Sidebar from '../components/dashboard/sidebar';
+import Sidebar from '../components/dashboard/Sidebar';
 import VideoGrid from '../components/dashboard/VideoGrid';
-import Footer from '../components/dashboard/Footer';
+import TrendingVideos from '../components/search/TrendingVideos';
 
-const DashboardPage = () => (
-  <div className="flex flex-col h-screen">
-    {/* Header */}
-    <Header />
+const DashboardPage = () => {
+  const [searchQuery, setSearchQuery] = useState('');
 
-    <div className="flex flex-1">
-      {/* Sidebar */}
+  return (
+    <div className="flex">
       <Sidebar />
-
-      {/* Main Content */}
-      <div className="flex-1 overflow-auto">
-        <VideoGrid />
+      <div className="flex-1">
+        <Header onSearch={(query) => setSearchQuery(query)} />
+        <div className="p-4">
+          {searchQuery ? (
+            <h2 className="text-xl font-bold mb-4">Search Results for "{searchQuery}"</h2>
+          ) : (
+            <TrendingVideos />
+          )}
+          <VideoGrid />
+        </div>
       </div>
     </div>
-
-    {/* Footer */}
-    <Footer />
-  </div>
-);
+  );
+};
 
 export default DashboardPage;

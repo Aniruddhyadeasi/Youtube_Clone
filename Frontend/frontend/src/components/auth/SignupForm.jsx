@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, Loader2, Upload } from 'lucide-react';
 import Alert from '@/components/ui/alert';
+import { useNavigate } from 'react-router-dom';
 
 const SignupForm = ({ onSuccess }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -74,7 +76,7 @@ const SignupForm = ({ onSuccess }) => {
         }
       });
 
-      const response = await fetch('/api/v1/users/register', {
+      const response = await fetch('http://localhost:8000/api/v1/users/register', {
         method: 'POST',
         body: form,
         credentials: 'include'
@@ -89,6 +91,8 @@ const SignupForm = ({ onSuccess }) => {
       if (onSuccess) {
         onSuccess(data.data);
       }
+
+      navigate('/', { replace: true });
     } catch (err) {
       setError(err.message || 'Something went wrong');
     } finally {
@@ -101,7 +105,7 @@ const SignupForm = ({ onSuccess }) => {
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <img
           className="mx-auto h-12 w-auto"
-          src="/api/placeholder/48/48"
+          src='https://static.vecteezy.com/system/resources/previews/015/806/664/original/play-button-for-media-app-logo-design-streaming-service-app-logotype-multimedia-player-icon-design-element-for-music-and-movie-start-sign-audio-and-video-editor-logo-vector.jpg'
           alt="Logo"
         />
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
@@ -233,7 +237,7 @@ const SignupForm = ({ onSuccess }) => {
           <div className="mt-6 text-center text-sm">
             <p className="text-gray-600">
               Already have an account?{' '}
-              <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+              <a href="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
                 Sign in instead
               </a>
             </p>

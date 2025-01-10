@@ -386,6 +386,9 @@ const getUserChannelProfile = asyncHandler(async (req,res) => {
 })
 
 const getWatchHistory = asyncHandler(async(req, res) => {
+    if (!req.user || !req.user._id){
+        throw new ApiError(400, "User ID is missing or invalid")
+    }
     const user = await User.aggregate([
         {
             $match: {
@@ -395,13 +398,18 @@ const getWatchHistory = asyncHandler(async(req, res) => {
         {
             $lookup: {
                 from: "videos",
-                localField: "watchHistory",
-                foreignField: "_id",
-                as: "watchHistory",
+                let: { watchHistory: "$watchHistory" },
                 pipeline: [
                     {
-                        $lookup:{
-                            from:"users",
+                        $match: {
+                            $expr: {
+                                $in: ["$_id", "$$watchHistory"],
+                            },
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: "users",
                             localField: "owner",
                             foreignField: "_id",
                             as: "owner",
@@ -410,23 +418,31 @@ const getWatchHistory = asyncHandler(async(req, res) => {
                                     $project: {
                                         fullName: 1,
                                         username: 1,
-                                        avatar: 1
-                                    }
-                                }
-                            ]
-                        }
+                                        avatar: 1,
+                                    },
+                                },
+                            ],
+                        },
                     },
                     {
-                        $addFields:{
+                        $addFields: {
                             owner: {
-                                $first: "$owner"
-                            }
-                        }
-                    }
-                ]
-            }
-        }
+                                $first: "$owner",
+                            },
+                        },
+                    },
+                ],
+                as: "watchHistory",
+            },
+        },
+        
     ])
+
+    if (!user || user.length === 0 ){
+        throw new ApiError(404, "User not found")
+    }
+
+    const watchHistory = user[0]?.watchHistory || []
 
     return res
     .status(200)
